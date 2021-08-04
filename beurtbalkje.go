@@ -21,9 +21,9 @@ var connectionCount int32
 
 func main() {
 
-	pFlag := flag.Int("p", 8888, "proxy server port")
-	tFlag := flag.String("t", "", "target server")
-	waitFlag := flag.Int("wait", 30, "timeout in seconds")
+	pFlag := flag.Int("port", 8888, "proxy server port")
+	tFlag := flag.String("target", "", "target server")
+	waitFlag := flag.Int("timeout", 30, "timeout in seconds")
 	flag.Parse()
 
 	port := *pFlag
@@ -31,8 +31,12 @@ func main() {
 	timeout := time.Duration(*waitFlag) * time.Second
 
 	if target == "" {
-		fmt.Println("missing target flag, example: -t=localhost:8080")
-		os.Exit(1)
+		args := flag.Args()
+		if len(args) != 1 {
+			fmt.Println("usage: beurtbalkje [-port=8888] [-timeout=30] target")
+			os.Exit(1)
+		}
+		target = args[0]
 	}
 	if regexp.MustCompile("^[0-9]+$").MatchString(target) {
 		target = "localhost:" + target
