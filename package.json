@@ -1,7 +1,7 @@
 {
   "name": "beurtbalkje",
   "description": "Connection queue proxy for restarting services",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "bin": {
     "beurtbalkje": "./beurtbalkje.js"

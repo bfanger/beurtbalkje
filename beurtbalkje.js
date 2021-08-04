@@ -16,7 +16,7 @@ function strippedArgs() {
 function detectBin() {
   let bin = "linux";
   try {
-    const platform = execSync("uname", { encoding: "utf-8" });
+    const platform = execSync("uname", { encoding: "utf-8", stdio: "pipe" });
     if (/^Darwin/.test(platform)) {
       bin = "beurtbalkje-macos";
     } else {
@@ -29,7 +29,7 @@ function detectBin() {
 }
 
 const cli = __dirname + "/bin/" + detectBin() + " " + strippedArgs().join(" ");
-console.log(cli);
+
 const child = exec(cli, (err) => {
   if (err.code) {
     process.exit(err.code);
