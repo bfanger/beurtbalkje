@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-const { execSync, exec } = require("child_process");
+import { execSync, exec } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 function strippedArgs() {
   let args = process.argv;
@@ -28,9 +30,12 @@ function detectBin() {
   return bin;
 }
 
-const cli = __dirname + "/bin/" + detectBin() + " " + strippedArgs().join(" ");
+const command =
+  path.join(fileURLToPath(import.meta.url), "../bin/", detectBin()) +
+  " " +
+  strippedArgs().join(" ");
 
-const child = exec(cli, (err) => {
+const child = exec(command, (err) => {
   if (err.code) {
     process.exit(err.code);
   }

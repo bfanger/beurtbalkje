@@ -1,20 +1,22 @@
 {
   "name": "beurtbalkje",
   "description": "Connection queue proxy for restarting services",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "license": "MIT",
   "bin": {
     "beurtbalkje": "./beurtbalkje.js"
   },
+  "type": "module",
   "scripts": {
     "build": "concurrently npm:build:*",
-    "build:window": "GOOS=windows GOARCH=amd64 go build -o bin/ beurtbalkje.go",
+    "build:windows": "GOOS=windows GOARCH=amd64 go build -o bin/ beurtbalkje.go",
     "build:macos": "GOOS=darwin GOARCH=amd64 go build -o bin/beurtbalkje-macos beurtbalkje.go",
     "build:linux": "GOOS=linux GOARCH=amd64 go build -o bin/beurtbalkje-linux beurtbalkje.go",
-    "dev": "gow run ./beurtbalkje.go -t=localhost:8080"
+    "dev": "wgo run ./beurtbalkje.go localhost:5173",
+    "format": "prettier --write **/*.js"
   },
   "devDependencies": {
-    "concurrently": "^6.2.0",
-    "prettier": "^2.3.2"
+    "concurrently": "^9.2.0",
+    "prettier": "^3.6.0"
   }
 }
