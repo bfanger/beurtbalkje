@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-check
 import { execSync, exec } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -36,13 +37,13 @@ const command =
   strippedArgs().join(" ");
 
 const child = exec(command, (err) => {
-  if (err.code) {
+  if (err?.code) {
     process.exit(err.code);
   }
 });
-child.stdout.on("data", function (data) {
+child.stdout?.on("data", function (data) {
   process.stdout.write(data);
 });
-child.stderr.on("data", function (data) {
+child.stderr?.on("data", function (data) {
   process.stderr.write(data);
 });
