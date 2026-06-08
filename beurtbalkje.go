@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/url"
 	"os"
 	"regexp"
 	"sync/atomic"
@@ -18,6 +19,13 @@ import (
 )
 
 var connectionCount int32
+
+func normalizeTarget(raw string) string {
+	if u, err := url.Parse(raw); err == nil && u.Host != "" {
+		return u.Host
+	}
+	return raw
+}
 
 func main() {
 
@@ -38,6 +46,7 @@ func main() {
 		}
 		target = args[0]
 	}
+	target = normalizeTarget(target)
 	if regexp.MustCompile("^[0-9]+$").MatchString(target) {
 		target = "localhost:" + target
 	}
@@ -98,7 +107,7 @@ func connectAndRetry(remote string, timeout time.Duration) (net.Conn, error) {
 	for {
 		proxy, err := net.Dial("tcp", remote)
 		if err != nil {
-			if time.Now().Sub(started) > timeout {
+			if time.Since(started) > timeout {
 				return nil, fmt.Errorf("timed out after %s", timeout)
 			}
 			i++
@@ -106,7 +115,7 @@ func connectAndRetry(remote string, timeout time.Duration) (net.Conn, error) {
 			time.Sleep(50 * time.Millisecond)
 		} else {
 			if i != 0 {
-				fmt.Printf("\rconnected after %s\n", time.Now().Sub(started))
+				fmt.Printf("\rconnected after %s\n", time.Since(started))
 			}
 			return proxy, nil
 		}
